@@ -1,0 +1,20 @@
+{
+  "name": "@aydrian/pulumi-sparkpost",
+  "main": "bin/index.js",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "typings": "bin/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "devDependencies": {
+    "@types/sparkpost": "^2.1.4",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.1"
+  },
+  "dependencies": {
+    "@pulumi/pulumi": "^0.17.14",
+    "sparkpost": "^2.1.3"
+  }
+}
