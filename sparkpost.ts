@@ -61,7 +61,7 @@ class SparkPostInboundDomainProvider implements dynamic.ResourceProvider {
   };
 }
 
-interface SparkPostInboundDomainResourceArgs {
+export interface SparkPostInboundDomainResourceArgs {
   domain: pulumi.Input<string>;
 }
 
@@ -163,7 +163,7 @@ class SparkPostRelayWebhookProvider implements dynamic.ResourceProvider {
   };
 }
 
-interface SparkPostRelayWebhookResourceArgs {
+export interface SparkPostRelayWebhookResourceArgs {
   name?: pulumi.Input<string>;
   target: pulumi.Input<string>;
   domain: pulumi.Input<string>;
@@ -288,7 +288,7 @@ class SparkPostWebhookProvider implements dynamic.ResourceProvider {
   };
 }
 
-interface SparkPostWebhookResourceArgs {
+export interface SparkPostWebhookResourceArgs {
   name: pulumi.Input<string>;
   target: pulumi.Input<string>;
   events: pulumi.Input<Array<string>>;
