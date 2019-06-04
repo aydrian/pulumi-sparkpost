@@ -1,14 +1,14 @@
 import * as SparkPost from "sparkpost";
 import * as pulumi from "@pulumi/pulumi";
 import * as dynamic from "@pulumi/pulumi/dynamic";
-import { name, version } from "./package.json";
+//import { name, version } from "./package.json";
 
 const spConfig = new pulumi.Config("sparkpost");
 const spApiKey = spConfig.require("api-key");
 const spEndpoint = spConfig.get("endpoint");
 const spOpts = {
-  ...(spEndpoint && { endpoint: spEndpoint }),
-  stackIdentity: `${name}/${version}`
+  ...(spEndpoint && { endpoint: spEndpoint })
+  //stackIdentity: `${name}/${version}`
 };
 
 enum authTypes {
