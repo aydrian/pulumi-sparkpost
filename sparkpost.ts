@@ -1,8 +1,15 @@
 import * as SparkPost from "sparkpost";
 import * as pulumi from "@pulumi/pulumi";
 import * as dynamic from "@pulumi/pulumi/dynamic";
+import { name, version } from "./package.json";
 
-const spApiKey = new pulumi.Config("sparkpost").require("api-key");
+const spConfig = new pulumi.Config("sparkpost");
+const spApiKey = spConfig.require("api-key");
+const spEndpoint = spConfig.get("endpoint");
+const spOpts = {
+  ...(spEndpoint && { endpoint: spEndpoint }),
+  stackIdentity: `${name}/${version}`
+};
 
 enum authTypes {
   none,
@@ -34,7 +41,7 @@ class SparkPostInboundDomainProvider implements dynamic.ResourceProvider {
   };
 
   create = async (inputs: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
     const { domain } = inputs;
 
     try {
@@ -43,7 +50,8 @@ class SparkPostInboundDomainProvider implements dynamic.ResourceProvider {
       });
 
       return {
-        id: `${domain}`
+        id: `${domain}`,
+        domain: `${domain}` // duplicating to make it more clear
       };
     } catch (err) {
       throw new Error(`SparkPost Error: ${JSON.stringify(err.errors)}`);
@@ -51,7 +59,7 @@ class SparkPostInboundDomainProvider implements dynamic.ResourceProvider {
   };
 
   delete = async (id: pulumi.ID, props: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       await client.inboundDomains.delete(id);
@@ -101,7 +109,7 @@ class SparkPostRelayWebhookProvider implements dynamic.ResourceProvider {
   };
 
   create = async (inputs: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       const res = await client.relayWebhooks.create({
@@ -129,7 +137,7 @@ class SparkPostRelayWebhookProvider implements dynamic.ResourceProvider {
   };
 
   update = async (id: string, olds: any, news: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       let res = await client.webhooks.update(id, {
@@ -153,7 +161,7 @@ class SparkPostRelayWebhookProvider implements dynamic.ResourceProvider {
   };
 
   delete = async (id: pulumi.ID, props: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       await client.relayWebhooks.delete(id);
@@ -216,7 +224,7 @@ class SparkPostWebhookProvider implements dynamic.ResourceProvider {
   };
 
   create = async (inputs: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       const res = await client.webhooks.create({
@@ -247,7 +255,7 @@ class SparkPostWebhookProvider implements dynamic.ResourceProvider {
   };
 
   update = async (id: string, olds: any, news: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       const res = await client.webhooks.update(id, {
@@ -278,7 +286,7 @@ class SparkPostWebhookProvider implements dynamic.ResourceProvider {
   };
 
   delete = async (id: pulumi.ID, props: any) => {
-    const client = new SparkPost(spApiKey);
+    const client = new SparkPost(spApiKey, spOpts);
 
     try {
       await client.webhooks.delete(id);
